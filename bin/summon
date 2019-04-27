@@ -1,0 +1,46 @@
+#!/bin/bash
+
+function STDERR { cat - 1>&2; }
+
+
+
+NUM_ARGS=$#;
+if [ $NUM_ARGS -le 0 ]; then
+	echo "You must specify paths to daemons or directories that contains daemon scripts!" | STDERR;
+	echo "Usage: summon script_or_dir_path [script_or_dir_path]" | STDERR;
+	exit 1;
+fi
+
+for DAEMON in "$@"; do
+	if [ ! -e $DAEMON ]; then
+		echo "Input path \`$DAEMON\` doesn't exist!";
+	fi
+done
+
+
+
+COMMAND_LIST=()
+for DAEMON in "$@"; do
+	if [ -d $DAEMON ]; then
+		for DAEMON_FILE in $(find "$DAEMON" -maxdepth 1 ); do
+			if [ -f $DAEMON_FILE ] && [ -x $DAEMON_FILE ]; then
+				COMMAND_LIST+=($DAEMON_FILE)
+			fi
+		done
+	elif [ -x $DAEMON ]; then
+		COMMAND_LIST+=($DAEMON)
+	fi
+done
+
+
+CURR_DIR=$(pwd);
+for COMMAND in "${COMMAND_LIST[@]}"; do
+	if [ "${COMMAND:0:1}" != "/" ]; then
+		COMMAND="$CURR_DIR/$COMMAND";
+	fi
+
+	echo "Summoning daemon \`$COMMAND\`" | STDERR;
+	($COMMAND >/dev/null 2>&1 &)
+	
+#	setsid $COMMAND > /dev/null 2>&1 &
+done

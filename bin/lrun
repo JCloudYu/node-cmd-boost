@@ -1,0 +1,60 @@
+#!/bin/bash
+
+function STDERR { cat - 1>&2; }
+
+
+DELAY=1
+NUM_RETRIES=-1
+while [ $# -gt 0 ]; do
+	case "$1" in
+		--delay|-D)
+			shift;
+			DELAY="$1";
+			shift;
+		;;
+		--retry|-R)
+			shift;
+			NUM_RETRIES="$1";
+			shift;
+		;;
+		*)
+			break;
+		;;
+	esac
+done
+
+
+
+NUM_ARGS=$#;
+if [ $NUM_ARGS -le 0 ]; then
+	echo "Usage: lrun [OPTIONS] command args" | STDERR;
+	echo -en "OPTIONS:\n" | STDERR;
+	echo -en "    --delay\n" | STDERR;
+	echo -en "    -D\n" | STDERR;
+	echo -en "        The interval between retries, default to 0 (immediate)\n\n" | STDERR;
+	echo -en "    --retry\n" | STDERR;
+	echo -en "    -R\n" | STDERR;
+	echo -en "        The maximum number of retries, default to 0 (infinite)\n" | STDERR;
+	exit 1;
+fi
+
+
+if [ $DELAY == "" ] || [ $DELAY -le 0 ]; then DELAY=0; fi
+if [ $NUM_RETRIES == "" ] || [ $NUM_RETRIES -lt 0 ]; then NUM_RETRIES=-1; fi
+
+ARGV=( "$@" );
+ARGS=( "${ARGV[@]:1}" );
+
+while true; do
+	${ARGV[0]} "${ARGS[@]}";
+	if [ "$?" -eq 0 ]; then exit 0; fi
+	
+	
+	if [ $NUM_RETRIES -eq 0 ]; then
+		break;
+	elif [ $NUM_RETRIES -gt 0 ]; then 
+		(( NUM_RETRIES-- ));
+	fi
+	
+	if [ $DELAY -gt 0 ]; then sleep $DELAY; fi
+done

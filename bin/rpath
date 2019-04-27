@@ -1,0 +1,24 @@
+#!/usr/bin/node
+
+const [,, ...argv] = process.argv;
+const fs	= require( 'fs' );
+const path	= require( 'path' );
+
+if ( argv.length === 0 || argv[0] === "-h" ) {
+	process.stderr.write( `usage: rpath file_path\n` );
+	process.exit(1);
+}
+
+let file_path = argv.shift();
+try {
+	const stat = fs.lstatSync(file_path);
+	if ( stat.isSymbolicLink() ) {
+		file_path = fs.realpathSync(file_path);
+	}
+} catch(e) {
+	process.stderr.write( `Cannot access file \`${file_path}\`!\n` );
+	process.exit(1);
+}
+
+file_path = path.resolve(file_path);
+process.stdout.write( `${file_path}\n` );	

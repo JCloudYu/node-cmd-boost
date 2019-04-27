@@ -1,0 +1,19 @@
+#!/bin/bash
+
+function STDERR { cat - 1>&2; }
+
+if [ -e /usr/bin/node ]; then
+	NODE=/usr/bin/node;
+else
+	NODE=$(which node);
+fi
+
+
+
+if [ "$NODE" == "" ]; then
+	echo "node cannot be found!" | STDERR;
+	exit 1;
+fi
+
+LIB_DIR=$(dirname $(dirname $(/usr/bin/rpath $0)))/lib
+$NODE --experimental-worker --experimental-modules --loader "${LIB_DIR}/esm-js.loader.mjs" "$@"

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+function STDERR { cat - 1>&2; }
+
+if [ -e /usr/bin/ssh ]; then
+	SSH=/usr/bin/ssh;
+else
+	SSH=$(which ssh);
+fi
+
+
+
+if [ "$SSH" == "" ]; then
+	echo "ssh cannot be found!" | STDERR;
+	exit 1;
+fi
+
+
+$SSH -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $@
