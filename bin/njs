@@ -17,4 +17,4 @@ fi
 
 
 LIB_DIR=$(dirname $(dirname $($RPATH $0)))/lib
-$NODE --experimental-worker --experimental-modules --loader "${LIB_DIR}/esm-js.loader.mjs" "$@"
+$NODE --experimental-modules --loader "${LIB_DIR}/esm-js.loader.mjs" "$@"
