@@ -1,0 +1,9 @@
+# OS dependent caches
+.DS_Store
+Thumbs.db
+
+# IDE dependent configuration files
+.idea
+.vs_code
+
+
