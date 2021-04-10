@@ -1,6 +1,6 @@
 {
 	"name": "cmd-boost",
-	"version": "0.1.8",
+	"version": "0.2.0",
 	"description": "A tiny library that provides some convenient tools for command line users",
 	"main": "error.js",
 	"bin": {
@@ -10,8 +10,10 @@
 		"rpath": "./bin/rpath",
 		"summon": "./bin/summon"
 	},
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+	"scripts": {},
+	"engines" : {
+		"node" : ">=12",
+		"npm": ">=6.0"
 	},
 	"repository": {
 		"type": "git",

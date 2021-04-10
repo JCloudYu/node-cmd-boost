@@ -9,12 +9,17 @@ if [ "$NODE" == "" ]; then
 	exit 1;
 fi
 
-RPATH=$(which rpath);
-if [ "$RPATH" == "" ]; then
-	echo "rpath cannot be found!" | STDERR;
-	exit 1;
+
+
+GLOBAL_MODULE_PATH=$(npm prefix -g);
+export NODE_PATH="${NODE_PATH}:${GLOBAL_MODULE_PATH}/lib/node_modules";
+
+
+
+CURR_WORKDIR=$(pwd);
+LOADER_PATH=$(CURR_WORKDIR)/.loader.mjs;
+if [ -f "$LOADER_PATH" ]; then
+  $NODE --experimental-loader --loader "file://$LOADER_PATH" "$@"
+else
+  $NODE "$@"
 fi
-
-
-LIB_DIR=$(dirname $(dirname $($RPATH $0)))/lib
-$NODE --experimental-modules --loader "file://${LIB_DIR}/.loader.mjs" "$@"
