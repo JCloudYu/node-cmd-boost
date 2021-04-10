@@ -1,6 +1,6 @@
 {
 	"name": "cmd-boost",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "A tiny library that provides some convenient tools for command line users",
 	"main": "error.js",
 	"bin": {
@@ -11,8 +11,8 @@
 		"summon": "./bin/summon"
 	},
 	"scripts": {},
-	"engines" : {
-		"node" : ">=12",
+	"engines": {
+		"node": ">=12",
 		"npm": ">=6.0"
 	},
 	"repository": {
