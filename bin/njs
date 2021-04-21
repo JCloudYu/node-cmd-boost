@@ -19,7 +19,7 @@ export NODE_PATH="${NODE_PATH}:${GLOBAL_MODULE_PATH}/lib/node_modules";
 CURR_WORKDIR=$(pwd);
 LOADER_PATH="$CURR_WORKDIR/.loader.mjs";
 if [ -f "$LOADER_PATH" ]; then
-  $NODE --experimental-loader --loader "file://$LOADER_PATH" "$@"
+  $NODE --experimental-loader "file://$LOADER_PATH" "$@"
 else
   $NODE "$@"
 fi
