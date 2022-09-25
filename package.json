@@ -1,6 +1,6 @@
 {
 	"name": "cmd-boost",
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"description": "A tiny library that provides some convenient tools for command line users",
 	"main": "error.js",
 	"bin": {

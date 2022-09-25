@@ -1,0 +1,44 @@
+#!/bin/bash
+
+
+if [ -e /usr/bin/ssh ]; then
+	SSH=/usr/bin/ssh;
+else
+	SSH=$(which ssh);
+fi
+
+ITEM="$1";
+shift;
+
+CONN_CMD=( $(echo "$ITEM" | sed "s/[:]/ /g") )
+
+
+
+if (( "${#CONN_CMD[@]}" < 3 )); then
+	echo "Invalid link descriptor";
+	exit 1;
+fi
+
+if (( "${#CONN_CMD[@]}" == 3 )); then
+	CONN_CMD=( "127.0.0.1", "${CONN_CMD[@]}" );
+fi
+
+
+DIGIT_MATCH="^[0-9]{1,5}$";
+if [[ ! "${CONN_CMD[1]}" =~ $DIGIT_MATCH ]] || (( "${CONN_CMD[1]}" <= 0 )) || (( "${CONN_CMD[1]}" > 65535 )); then
+	echo "Invalid remote port";
+	exit 1;
+fi
+
+
+DIGIT_MATCH="^[0-9]{1,5}$";
+if [[ ! "${CONN_CMD[3]}" =~ $DIGIT_MATCH ]] || (( "${CONN_CMD[3]}" <= 0 )) || (( "${CONN_CMD[3]}" > 65535 )); then
+	echo "Invalid local port";
+	exit 1;
+fi
+
+
+#incognito "$@" "ss -tlnp | grep ${CONN_CMD[1]} | sed "s/\s\+/ /g" | sed 's/.*pid=\([[:digit:]]\+\).*/\1/g' | awk '{ if(a[$0]++) print $0 }') | xargs -r -n 1 kill"
+$SSH "$@" "lsof -ti:${CONN_CMD[1]} | xargs -r -n 1 kill";
+$SSH -NR "${CONN_CMD[0]}:${CONN_CMD[1]}:${CONN_CMD[2]}:${CONN_CMD[3]}" -o ServerAliveInterval=5 -o ExitOnForwardFailure=yes "$@"
+exit $?

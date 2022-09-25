@@ -16,4 +16,4 @@ if [ "$SSH" == "" ]; then
 fi
 
 
-$SSH -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $@
+$SSH -o ExitOnForwardFailure=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $@
