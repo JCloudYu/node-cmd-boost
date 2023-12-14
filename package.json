@@ -1,6 +1,6 @@
 {
 	"name": "cmd-boost",
-	"version": "0.3.1",
+	"version": "0.3.2",
 	"description": "A tiny library that provides some convenient tools for command line users",
 	"main": "error.js",
 	"bin": {
@@ -8,7 +8,8 @@
 		"lrun": "./bin/lrun",
 		"runjs": "./bin/njs",
 		"rpath": "./bin/rpath",
-		"summon": "./bin/summon"
+		"summon": "./bin/summon",
+		"rtunnel": "./bin/summon"
 	},
 	"scripts": {},
 	"engines": {
