@@ -9,7 +9,7 @@
 		"runjs": "./bin/njs",
 		"rpath": "./bin/rpath",
 		"summon": "./bin/summon",
-		"rtunnel": "./bin/summon"
+		"rtunnel": "./bin/rtunnel"
 	},
 	"scripts": {},
 	"engines": {
